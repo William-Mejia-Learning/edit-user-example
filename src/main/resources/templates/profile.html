@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>profile</title>
+</head>
+<body>
+    <h1>Profile</h1>
+
+    <div sec:authorize="isAuthenticated()">
+        <ul>
+            <li th:text="${#authentication.principal.username}"></li>
+            <li th:text="${#authentication.principal.email}"></li>
+        </ul>
+
+        <a th:href="@{/edit}"><input type="submit" value="edit"></a>
+
+    </div>
+</body>
+</html>
