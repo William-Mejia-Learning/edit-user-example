@@ -1,8 +1,11 @@
 package com.example.userproject.models;
 
+import com.example.userproject.repositories.UserRepository;
+import com.example.userproject.services.UserDetailsLoader;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
+import javax.validation.Constraint;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -18,9 +21,13 @@ public class User {
     private long id;
 
     @NotBlank
+    @NotNull
+    @Column(unique= true)
     private String username;
 
     @NotBlank
+    @NotNull
+    @Column(unique = true)
     private String email;
 
     @NotBlank

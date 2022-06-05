@@ -2,7 +2,9 @@ package com.example.userproject.controllers;
 
 import com.example.userproject.models.User;
 import com.example.userproject.repositories.UserRepository;
+import com.example.userproject.services.UserDetailsLoader;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -21,6 +23,12 @@ public class UserController {
     public UserController(UserRepository userDao, PasswordEncoder passwordEncoder) {
         this.userDao = userDao;
         this.passwordEncoder = passwordEncoder;
+    }
+
+    @GetMapping("/edit-error")
+    @ResponseBody
+    public String editError(){
+        return "Error editing User";
     }
 
     @GetMapping("/profile")
@@ -59,11 +67,14 @@ public class UserController {
     @PostMapping("/edit")
     public String submitEdit(@ModelAttribute User user){
         User userInfoPull = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-
         User editUser = userDao.getById(userInfoPull.getId());
 
         editUser.setUsername(user.getUsername());
         editUser.setEmail(user.getEmail());
+
+        if(userInfoPull.getUsername().equals(editUser.getUsername()) || userDao.existsByUsername(user.getUsername()) || userInfoPull.equals(editUser.getEmail()) || userDao.existsByEmail(user.getEmail())){
+            return "redirect:/edit-error";
+        }
 
         userDao.save(editUser);
         return "redirect:/profile";

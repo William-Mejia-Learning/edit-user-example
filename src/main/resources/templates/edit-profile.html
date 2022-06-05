@@ -7,6 +7,10 @@
 </head>
 <body>
     <form th:action="@{/edit}" method="post" th:object="${useredit}">
+        <ul>
+            <li th:if="${#fields.hasErrors('username')}" th:errors="*{username}"></li>
+            <li th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></li>
+        </ul>
         <input type="text" id="username" th:field="*{username}"><br>
         <input type="text" id="email" th:field="*{email}"><br>
         <input type="submit" value="submit">
