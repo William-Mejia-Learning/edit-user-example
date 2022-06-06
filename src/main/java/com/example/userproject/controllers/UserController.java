@@ -72,11 +72,19 @@ public class UserController {
         editUser.setUsername(user.getUsername());
         editUser.setEmail(user.getEmail());
 
-        if(userInfoPull.getUsername().equals(editUser.getUsername()) || userDao.existsByUsername(user.getUsername()) || userInfoPull.equals(editUser.getEmail()) || userDao.existsByEmail(user.getEmail())){
-            return "redirect:/edit-error";
+
+
+
+        if(userInfoPull.getUsername().equals(editUser.getUsername())){
+            userDao.save(editUser);
+        }else if(userInfoPull.equals(editUser.getEmail())){
+            userDao.save(editUser);
+        }else if(userDao.existsByUsername(user.getUsername()) || userDao.existsByEmail(user.getEmail())){
+            return "redirect:/profile";
+        } else if(!userInfoPull.getUsername().equals(editUser.getUsername()) && !userInfoPull.equals(editUser.getEmail())){
+            userDao.save(editUser);
         }
 
-        userDao.save(editUser);
         return "redirect:/profile";
     }
 }
